@@ -51,8 +51,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 // authorizeRequests = authorizeHttpRequests -- antMachers = requestMatchers
-                .requestMatchers(HttpMethod.GET,"/secret").hasRole("USER")
-                .requestMatchers(HttpMethod.POST,"/secret").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/users").hasRole("USER")
+                .requestMatchers(HttpMethod.POST,"/users/secret").hasRole("ADMIN")
                 .requestMatchers("/**").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

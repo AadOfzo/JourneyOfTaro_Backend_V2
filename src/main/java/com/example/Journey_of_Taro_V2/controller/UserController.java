@@ -1,13 +1,12 @@
 package com.example.Journey_of_Taro_V2.controller;
-
-import com.example.Journey_of_Taro_V2.model.User;
-import com.example.Journey_of_Taro_V2.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.Journey_of_Taro_V2.dto.UserDto;
+import com.example.Journey_of_Taro_V2.sevice.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,13 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
-    @Autowired
-    UserRepository userRepository;
 
-    @GetMapping("/users/name")
-    public ResponseEntity<Object> getUserName(){
-        return new ResponseEntity<>(userRepository.findById(userName), HttpStatus.OK);
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
+
+    @PostMapping("/users")
+    public ResponseEntity<Long> createUser(@Validated @RequestBody UserDto userDto) {
+        Long userId = userService.createUser(userDto);
+        return new ResponseEntity<>(userId, HttpStatus.CREATED);
+    }
+
+//    @GetMapping("/users/name")
+//    public ResponseEntity<Object> getUserName(){
+//        return new ResponseEntity<>(newUser.findBy(), HttpStatus.OK);
+//    }
 
     @GetMapping("/users")
     public String sayHello() {
@@ -37,10 +46,5 @@ public class UserController {
         return "this is secret...";
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User userInput) {
-        User newUser = userRepository.save(userInput);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-    }
 
 }

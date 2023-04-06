@@ -1,4 +1,4 @@
-package com.example.Journey_of_Taro_V2.config;
+package com.example.Journey_of_Taro_V2.controllers;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

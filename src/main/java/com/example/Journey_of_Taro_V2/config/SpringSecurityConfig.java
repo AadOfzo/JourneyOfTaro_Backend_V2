@@ -2,12 +2,14 @@ package com.example.Journey_of_Taro_V2.config;
 
 
 import com.example.Journey_of_Taro_V2.filter.JwtRequestFilter;
-import com.example.Journey_of_Taro_V2.sevices.CustomUserDetailsService;
+import com.example.Journey_of_Taro_V2.sevices.user.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -45,20 +47,21 @@ public class SpringSecurityConfig {
         return expressionHandler;
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeRequests()
-                .expressionHandler(webSecurityExpressionHandler())
-                .antMatchers(HttpMethod.GET, "/roleHierarchy")
-                .hasRole("STAFF")
-    }
     // PasswordEncoderBean. Deze kun je overal in je applicatie injecteren waar nodig.
     // Je kunt dit ook in een aparte configuratie klasse zetten.
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // Authenticatie met customUserDetailsService en passwordEncoder
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
     }
 
     // Authorizatie met jwt
@@ -71,10 +74,13 @@ public class SpringSecurityConfig {
                 .httpBasic().disable()
                 .cors().and()
                 .authorizeRequests()
+                .expressionHandler(webSecurityExpressionHandler())
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/roleHierarchy")
+                .hasRole("STAFF")
                 .antMatchers("/authenticated").authenticated()
                 .antMatchers("/authenticate").permitAll()/*allen dit punt mag toegankelijk zijn voor niet ingelogde gebruikers*/
                 .anyRequest().denyAll()
@@ -84,5 +90,6 @@ public class SpringSecurityConfig {
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
 }

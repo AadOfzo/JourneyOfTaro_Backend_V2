@@ -1,20 +1,22 @@
 package com.example.Journey_of_Taro_V2.config;
 
-import com.example.Journey_of_Taro_V2.models.Privilege;
-import com.example.Journey_of_Taro_V2.models.Role;
-import com.example.Journey_of_Taro_V2.models.User;
-import com.example.Journey_of_Taro_V2.repositories.RoleRepository;
-import com.example.Journey_of_Taro_V2.repositories.UserRepository;
+import com.example.Journey_of_Taro_V2.models.user.Privilege;
+import com.example.Journey_of_Taro_V2.models.user.Role;
+import com.example.Journey_of_Taro_V2.models.user.User;
+import com.example.Journey_of_Taro_V2.repositories.user.PrivilegeRepository;
+import com.example.Journey_of_Taro_V2.repositories.user.RoleRepository;
+import com.example.Journey_of_Taro_V2.repositories.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
+@Component
 public class SetupDataLoader implements
         ApplicationListener<ContextRefreshedEvent> {
 

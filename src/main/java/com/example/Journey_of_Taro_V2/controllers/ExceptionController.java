@@ -2,7 +2,7 @@ package com.example.Journey_of_Taro_V2.controllers;
 
 import com.example.Journey_of_Taro_V2.exceptions.BadRequestException;
 import com.example.Journey_of_Taro_V2.exceptions.RecordNotFoundException;
-import com.example.Journey_of_Taro_V2.exceptions.UsernameNotFoundException;
+import com.example.Journey_of_Taro_V2.exceptions.user.UsernameNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +24,7 @@ public class ExceptionController {
     @ExceptionHandler(value = IndexOutOfBoundsException.class)
     public ResponseEntity<Object> exception(IndexOutOfBoundsException exception) {
 
-        return new ResponseEntity<>("This ID is not in the database", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("This song is not in the database", HttpStatus.NOT_FOUND);
 
     }
 

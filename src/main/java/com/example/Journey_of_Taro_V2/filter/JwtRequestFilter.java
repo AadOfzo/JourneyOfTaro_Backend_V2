@@ -1,7 +1,7 @@
 package com.example.Journey_of_Taro_V2.filter;
 
 
-import com.example.Journey_of_Taro_V2.sevices.CustomUserDetailsService;
+import com.example.Journey_of_Taro_V2.sevices.user.CustomUserDetailsService;
 import com.example.Journey_of_Taro_V2.utils.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +23,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
 
     private final JwtUtil jwtUtil;
+
 
     public JwtRequestFilter(CustomUserDetailsService userDetailsService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
